@@ -1,0 +1,30 @@
+# DNS / Email setup (example values; adjust to your provider)
+
+# A and AAAA records (if using a static host, point to their IP or CNAME)
+@   A     203.0.113.10
+@   AAAA  2001:db8::10
+
+# If using Vercel/Netlify, follow their CNAMEs instead:
+www CNAME  your-app-host.example.com.
+
+# Email (Google Workspace example)
+@   MX    1 ASPMX.L.GOOGLE.COM.
+@   MX    5 ALT1.ASPMX.L.GOOGLE.COM.
+@   MX    5 ALT2.ASPMX.L.GOOGLE.COM.
+@   MX   10 ALT3.ASPMX.L.GOOGLE.COM.
+@   MX   10 ALT4.ASPMX.L.GOOGLE.COM.
+
+# SPF (permit your mail sender)
+@   TXT   "v=spf1 include:_spf.google.com ~all"
+
+# DKIM (create selector in Google Admin; example 'google')
+google._domainkey TXT "v=DKIM1; k=rsa; p=YOUR_PUBLIC_KEY"
+
+# DMARC (monitoring → enforcing)
+_dmarc TXT "v=DMARC1; p=quarantine; rua=mailto:dmarc@gloven.org; fo=1"
+
+# Subdomains to reserve
+apply  CNAME  www.gloven.org.
+mentor CNAME  www.gloven.org.
+press  CNAME  www.gloven.org.
+api    CNAME  backend.host.example.

@@ -1,0 +1,46 @@
+# Gloven CLI Configuration
+provider: openai
+model: gpt-4o-mini
+outDir: ../../out
+promptDir: ../../ai_prompts
+locale: global
+
+# Guardrails to minimize costs during development
+guardrails:
+  maxRequests: 8
+  dryRunFallback: true
+
+# Service Level Objectives (SLOs)
+slo:
+  batch_scoring_success_rate: 0.99
+  max_batch_wallclock_minutes: 30
+
+# Cost Budgets
+budgets:
+  monthly_usd_soft: 50
+
+# CRM Integration
+crm:
+  defaultProvider: airtable
+  airtable:
+    tables:
+      applications: Applications
+      mentors: Mentors
+      investors: Investors
+  sheets:
+    ranges:
+      applications: "Applications!A1:H500"
+      mentors: "Mentors!A1:F200"
+
+# Portal Publishing
+publish:
+  portalDataDir: ../portal/public/data
+  sanitization:
+    maxSummaryLength: 200
+    removeEmails: true
+    removePhones: true
+  outputs:
+    - leaderboard.json
+    - top10.json
+    - health.json
+    - report.md

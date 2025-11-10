@@ -1,0 +1,87 @@
+name: Portal Preview
+
+on:
+  pull_request:
+    paths:
+      - 'gloven_starter_kit/portal/**'
+      - 'gloven_starter_kit/tools/gloven-cli/**'
+
+jobs:
+  preview-data:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: gloven_starter_kit/tools/gloven-cli/package-lock.json
+      
+      - name: Install CLI dependencies
+        working-directory: gloven_starter_kit/tools/gloven-cli
+        run: npm ci
+      
+      - name: Build CLI
+        working-directory: gloven_starter_kit/tools/gloven-cli
+        run: npm run build
+      
+      - name: Generate preview data
+        working-directory: gloven_starter_kit/tools/gloven-cli
+        env:
+          DRY_RUN: true
+        run: |
+          node dist/index.js publish-portal-data \
+            --out ../portal/public/data
+      
+      - name: Upload preview data
+        uses: actions/upload-artifact@v4
+        with:
+          name: portal-data-preview
+          path: gloven_starter_kit/portal/public/data/
+          retention-days: 7
+      
+      - name: Comment PR with preview info
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const path = require('path');
+            
+            // Read generated data
+            const dataDir = 'gloven_starter_kit/portal/public/data';
+            let comment = '## 📊 Portal Data Preview\n\n';
+            
+            try {
+              const healthPath = path.join(dataDir, 'health.json');
+              if (fs.existsSync(healthPath)) {
+                const health = JSON.parse(fs.readFileSync(healthPath, 'utf8'));
+                comment += '### Health Metrics\n';
+                comment += `- Total Apps: ${health.totalApps}\n`;
+                comment += `- GO: ${health.goCount} | Waitlist: ${health.waitlistCount}\n`;
+                comment += `- Avg Score: ${health.avgScore.toFixed(1)}\n\n`;
+              }
+              
+              const leaderboardPath = path.join(dataDir, 'leaderboard.json');
+              if (fs.existsSync(leaderboardPath)) {
+                const leaderboard = JSON.parse(fs.readFileSync(leaderboardPath, 'utf8'));
+                comment += '### Leaderboard\n';
+                comment += `- Total Entries: ${leaderboard.entries.length}\n`;
+                comment += `- Generated: ${new Date(leaderboard.generated).toLocaleString()}\n\n`;
+              }
+              
+              comment += '✅ Preview data generated successfully!\n';
+              comment += 'Download the artifact to inspect full data files.';
+            } catch (error) {
+              comment += '⚠️ Error reading preview data: ' + error.message;
+            }
+            
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: comment
+            });

@@ -1,0 +1,40 @@
+# Dependencies
+node_modules/
+package-lock.json
+yarn.lock
+
+# Build outputs
+dist/
+out/
+.next/
+build/
+
+# Version control
+.git/
+.github/
+
+# IDE
+.vscode/
+.idea/
+
+# Environment
+.env
+.env.local
+.env.production
+
+# Logs
+*.log
+npm-debug.log*
+
+# Test coverage
+coverage/
+
+# Portal build artifacts
+portal/.next/
+portal/.vercel/
+portal/public/data/*.json
+portal/public/data/*.md
+
+# OS
+.DS_Store
+Thumbs.db

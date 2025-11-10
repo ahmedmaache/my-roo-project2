@@ -1,0 +1,73 @@
+name: Portal Publish & Deploy
+
+on:
+  schedule:
+    - cron: '30 9 * * 1'  # Monday 09:30 UTC
+  workflow_dispatch:
+
+jobs:
+  publish-and-deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: gloven_starter_kit/tools/gloven-cli/package-lock.json
+      
+      - name: Install CLI dependencies
+        working-directory: gloven_starter_kit/tools/gloven-cli
+        run: npm ci
+      
+      - name: Build CLI
+        working-directory: gloven_starter_kit/tools/gloven-cli
+        run: npm run build
+      
+      - name: Generate batch scores
+        working-directory: gloven_starter_kit/tools/gloven-cli
+        env:
+          DRY_RUN: true
+        run: |
+          node dist/index.js batch-score \
+            --input ../../data/apps/applications.csv \
+            --concurrency 1 \
+            --out ../../out \
+            --dry-run
+      
+      - name: Generate health report
+        working-directory: gloven_starter_kit/tools/gloven-cli
+        env:
+          DRY_RUN: true
+        run: node dist/index.js report
+      
+      - name: Publish portal data
+        working-directory: gloven_starter_kit/tools/gloven-cli
+        env:
+          DRY_RUN: true
+        run: |
+          node dist/index.js publish-portal-data \
+            --out ../portal/public/data
+      
+      - name: Commit published data
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+          git add gloven_starter_kit/portal/public/data/
+          git diff --staged --quiet || git commit -m "chore: update portal data [skip ci]"
+          git push
+      
+      - name: Deploy to Vercel
+        if: ${{ env.VERCEL_TOKEN != '' }}
+        working-directory: gloven_starter_kit/portal
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+        run: |
+          npm i -g vercel
+          vercel deploy --prod --token=$VERCEL_TOKEN

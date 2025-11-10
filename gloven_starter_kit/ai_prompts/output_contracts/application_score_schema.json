@@ -1,0 +1,129 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Gloven Application Score",
+  "description": "Schema for structured application scoring using Gloven's rubric",
+  "type": "object",
+  "required": [
+    "startup_name",
+    "team",
+    "problem_size",
+    "insight",
+    "traction",
+    "timing",
+    "fit",
+    "impact",
+    "weighted_total_0to100",
+    "decision",
+    "red_flags",
+    "followup_questions",
+    "summary"
+  ],
+  "properties": {
+    "startup_name": {
+      "type": "string",
+      "description": "Company or project name"
+    },
+    "team": {
+      "$ref": "#/definitions/criterionScore",
+      "description": "Team assessment (25% weight)"
+    },
+    "problem_size": {
+      "$ref": "#/definitions/criterionScore",
+      "description": "Problem/market size assessment (20% weight)"
+    },
+    "insight": {
+      "$ref": "#/definitions/criterionScore",
+      "description": "Solution insight/uniqueness (15% weight)"
+    },
+    "traction": {
+      "$ref": "#/definitions/criterionScore",
+      "description": "Early traction/validation (15% weight)"
+    },
+    "timing": {
+      "$ref": "#/definitions/criterionScore",
+      "description": "Market timing (10% weight)"
+    },
+    "fit": {
+      "$ref": "#/definitions/criterionScore",
+      "description": "Program fit (10% weight)"
+    },
+    "impact": {
+      "$ref": "#/definitions/criterionScore",
+      "description": "Diversity & ecosystem impact (5% weight)"
+    },
+    "weighted_total_0to100": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 100,
+      "description": "Weighted total score (0-100 scale)"
+    },
+    "decision": {
+      "type": "string",
+      "enum": ["GO", "NO_GO", "WAITLIST"],
+      "description": "Final decision recommendation"
+    },
+    "red_flags": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Critical concerns or blockers"
+    },
+    "followup_questions": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "minItems": 0,
+      "maxItems": 5,
+      "description": "Questions to ask in interview or follow-up"
+    },
+    "summary": {
+      "type": "string",
+      "minLength": 50,
+      "maxLength": 500,
+      "description": "3-5 sentence human-readable assessment with recommendation"
+    },
+    "reviewer": {
+      "type": "string",
+      "description": "Name of reviewer (human or AI)"
+    },
+    "review_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Date of review (YYYY-MM-DD)"
+    }
+  },
+  "definitions": {
+    "criterionScore": {
+      "type": "object",
+      "required": ["score", "evidence", "strengths", "concerns"],
+      "properties": {
+        "score": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 5,
+          "description": "Score 1-5 (1=weak, 5=exceptional)"
+        },
+        "evidence": {
+          "type": "string",
+          "description": "Concise evidence or quote from application"
+        },
+        "strengths": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Bullet points of strengths"
+        },
+        "concerns": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Bullet points of concerns or gaps"
+        }
+      }
+    }
+  }
+}

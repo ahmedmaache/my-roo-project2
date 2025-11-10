@@ -1,0 +1,7 @@
+# Org Chart (Year 1)
+- Managing Director (0→1)
+- Program Director (1)
+- Platform/Community Lead (1)
+- Ops Coordinator (0.5)
+- Marketing/Comms (0.5)
+- Finance/Legal (fractional)

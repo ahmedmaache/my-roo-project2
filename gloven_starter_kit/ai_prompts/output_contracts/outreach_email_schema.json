@@ -1,0 +1,76 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Gloven Outreach Email",
+  "description": "Schema for AI-generated outreach emails with automation-ready fields",
+  "type": "object",
+  "required": ["subject", "preview_text", "body_markdown", "cta", "audience_segment", "tone"],
+  "properties": {
+    "subject": {
+      "type": "string",
+      "description": "Email subject line",
+      "minLength": 5,
+      "maxLength": 90
+    },
+    "preview_text": {
+      "type": "string",
+      "description": "Preview text shown in inbox (Gmail, Outlook)",
+      "maxLength": 90
+    },
+    "body_markdown": {
+      "type": "string",
+      "description": "Email body in Markdown format with links and bold for skimming. Use merge fields like {first_name}, {company}, {startup}"
+    },
+    "cta": {
+      "type": "string",
+      "description": "Primary call-to-action text",
+      "examples": ["Apply by Jan 31", "Book 20 min call", "RSVP for Demo Day"]
+    },
+    "ps": {
+      "type": "string",
+      "description": "Optional postscript"
+    },
+    "audience_segment": {
+      "type": "string",
+      "enum": ["founders", "mentors", "partners", "press", "investors", "alumni"],
+      "description": "Target audience for this email"
+    },
+    "tone": {
+      "type": "string",
+      "enum": ["warm", "direct", "celebratory", "urgent", "informational"],
+      "description": "Email tone/style"
+    },
+    "compliance": {
+      "type": "object",
+      "properties": {
+        "unsub_line": {
+          "type": "string",
+          "description": "Unsubscribe footer text",
+          "default": "You received this because you signed up at gloven.org. [Unsubscribe]"
+        },
+        "disclaimer": {
+          "type": "string",
+          "description": "Optional legal disclaimer"
+        }
+      }
+    },
+    "metadata": {
+      "type": "object",
+      "properties": {
+        "campaign_id": {
+          "type": "string",
+          "description": "Campaign identifier for tracking"
+        },
+        "send_date": {
+          "type": "string",
+          "format": "date",
+          "description": "Planned send date (YYYY-MM-DD)"
+        },
+        "ab_variant": {
+          "type": "string",
+          "enum": ["A", "B", "control"],
+          "description": "A/B test variant"
+        }
+      }
+    }
+  }
+}

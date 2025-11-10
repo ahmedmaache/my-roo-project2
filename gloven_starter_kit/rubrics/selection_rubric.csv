@@ -1,0 +1,9 @@
+Criteria,Weight (0-100),Score (1-5),Weighted Score Notes
+Team (drive, skill, learning speed),25,,
+Problem size (market, urgency),20,,
+Solution/insight uniqueness,15,,
+Early traction / validation,15,,
+Timing (tech/regulatory tailwinds),10,,
+Mission fit w/ Gloven,10,,
+Diversity & ecosystem impact,5,,
+TOTAL,100,,"=SUMPRODUCT(B2:B8,C2:C8*20) / 100"

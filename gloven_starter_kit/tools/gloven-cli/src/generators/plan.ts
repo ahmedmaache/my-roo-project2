@@ -1,0 +1,158 @@
+import type { LLMProvider } from '../providers/base.js';
+import { loadSystemPrompt, buildUserPrompt } from '../promptLoader.js';
+import { writeFile, resolvePath } from '../util/fs.js';
+import { logCostEstimate } from '../util/costGuard.js';
+import type { EnvConfig, GlovenConfig } from '../config.js';
+
+export interface PlanOptions {
+  regions: string;
+  budget: string;
+  target: string;
+  days: string;
+  out: string;
+}
+
+/**
+ * Generate 30/60/90 day growth plan
+ */
+export async function generatePlan(
+  provider: LLMProvider,
+  options: PlanOptions,
+  config: GlovenConfig,
+  envConfig: EnvConfig
+): Promise<void> {
+  console.log('\n📋 Generating 30/60/90 day growth plan...');
+  console.log(`🌍 Regions: ${options.regions}`);
+  console.log(`💰 Budget: $${options.budget}`);
+  console.log(`🎯 Target: ${options.target} applications`);
+  console.log(`📅 Timeline: ${options.days} days`);
+
+  // Handle DRY_RUN mode
+  if (envConfig.dryRun) {
+    console.log('🏃 DRY-RUN mode: Using placeholder plan');
+    const dryRunPlan = getDryRunPlan(options);
+    const outputPath = resolvePath(options.out);
+    await writeFile(outputPath, dryRunPlan);
+    console.log(`✅ Plan saved to: ${outputPath}`);
+    return;
+  }
+
+  // Load prompts
+  const systemPrompt = await loadSystemPrompt(config.promptDir);
+  const userPrompt = await buildUserPrompt('plan', config.promptDir, {
+    regions: options.regions,
+    budget: options.budget,
+    target: options.target,
+    days: options.days,
+  });
+
+  // Log cost estimate
+  logCostEstimate(
+    systemPrompt + userPrompt,
+    envConfig.maxOutputTokens,
+    envConfig.costPer1kInput,
+    envConfig.costPer1kOutput
+  );
+
+  try {
+    // Generate plan from LLM
+    const response = await provider.generate({
+      system: systemPrompt,
+      prompt: userPrompt,
+      json: false,
+      maxTokens: envConfig.maxOutputTokens,
+    });
+
+    // Write output
+    const outputPath = resolvePath(options.out);
+    await writeFile(outputPath, response);
+    console.log(`✅ Plan saved to: ${outputPath}`);
+  } catch (error) {
+    throw new Error(`Plan generation failed: ${(error as Error).message}`);
+  }
+}
+
+/**
+ * Generate dry-run placeholder plan
+ */
+function getDryRunPlan(options: PlanOptions): string {
+  return `# 30/60/90 Day Founder Acquisition Plan (DRY-RUN)
+
+**TL;DR:** This is a DRY-RUN placeholder for a ${options.days}-day growth plan targeting ${options.target} applications across ${options.regions} with a budget of $${options.budget}.
+
+## Goals & KPIs
+
+| Metric | Baseline | 30d Target | 60d Target | 90d Target |
+|--------|----------|------------|------------|------------|
+| Applications | 0 | ${Math.floor(parseInt(options.target) * 0.2)} | ${Math.floor(parseInt(options.target) * 0.5)} | ${options.target} |
+| Website Visits | 0 | 2,000 | 5,000 | 10,000 |
+| Email Subscribers | 0 | 500 | 1,200 | 2,500 |
+| Social Followers | 0 | 300 | 800 | 1,500 |
+
+## ICPs (Ideal Customer Profiles)
+
+1. **SaaS Builders** - Technical founders in early-stage B2B SaaS
+2. **AI/ML Innovators** - ML engineers building AI-first products
+3. **Climate Tech Founders** - Mission-driven teams in sustainability
+
+## Messaging
+
+**Value Props:**
+- 12-week intensive program with hands-on mentorship
+- Access to global network of operators and investors
+- Non-dilutive support + optional SAFE investment
+
+## Channels & Plays
+
+### Content (40% budget)
+1. Weekly founder stories on blog + LinkedIn
+2. Technical deep-dives on Medium/Dev.to
+3. YouTube/podcast appearances
+
+### Partner Communities (30% budget)
+1. Co-marketing with dev tools (Vercel, Supabase)
+2. University tech clubs outreach
+3. Slack/Discord community partnerships
+
+### Mentor Referral (20% budget)
+1. Mentor spotlight series
+2. Referral incentive program
+
+### Lightweight Paid (10% budget)
+1. LinkedIn ads to technical founders
+2. Twitter/X promoted posts
+
+## Calendar
+
+| Week | Key Activities |
+|------|----------------|
+| 1-4  | Launch content engine, establish partnerships |
+| 5-8  | Scale paid channels, activate mentor network |
+| 9-12 | Optimize best performers, final push |
+
+## Experiment Backlog (ICE Scores)
+
+| Experiment | Impact (1-10) | Confidence (1-10) | Ease (1-10) | ICE Score |
+|------------|---------------|-------------------|-------------|-----------|
+| LinkedIn founder stories | 8 | 9 | 8 | 25 |
+| Partner webinar series | 7 | 7 | 6 | 20 |
+| Twitter ads | 6 | 5 | 8 | 19 |
+
+## Budget Breakdown
+
+- Content: $${Math.floor(parseInt(options.budget) * 0.4).toLocaleString()}
+- Partners: $${Math.floor(parseInt(options.budget) * 0.3).toLocaleString()}
+- Mentor Programs: $${Math.floor(parseInt(options.budget) * 0.2).toLocaleString()}
+- Paid Ads: $${Math.floor(parseInt(options.budget) * 0.1).toLocaleString()}
+
+## Risks & Mitigations
+
+- **Risk:** Low response to cold outreach
+  - **Mitigation:** Focus on warm intro pathways through mentors
+- **Risk:** Content doesn't resonate
+  - **Mitigation:** A/B test headlines and formats weekly
+
+---
+*Generated by Gloven CLI (DRY-RUN mode)*
+`;
+}

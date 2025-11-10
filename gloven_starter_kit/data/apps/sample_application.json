@@ -1,0 +1,22 @@
+{
+  "startup_name": "CloudMetrics AI",
+  "one_liner": "Real-time cloud cost optimization using ML",
+  "founders": [
+    {
+      "name": "Sarah Chen",
+      "role": "CEO",
+      "background": "Ex-AWS PM, 8 years cloud"
+    },
+    {
+      "name": "David Park",
+      "role": "CTO",
+      "background": "PhD ML, Google Cloud"
+    }
+  ],
+  "location": "Berlin + Seoul",
+  "problem": "Companies waste 30-40% cloud spend on idle resources",
+  "solution": "ML model predicts usage, auto-scales, saves 25-35% monthly",
+  "traction": "$15k MRR, 12 customers, 40% MoM growth",
+  "business_model": "$99-$999/month SaaS",
+  "why_gloven": "Need US GTM strategy and enterprise sales playbook"
+}

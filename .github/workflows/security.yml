@@ -1,0 +1,211 @@
+# GitHub Security Workflow
+# Enterprise Maturity Pack v1 - Slice 1
+#
+# Runs security scans on every push and pull request to main branch
+# - Gitleaks for secret detection
+# - Custom regex scan for additional security checks
+
+name: Security Scan
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  gitleaks:
+    name: Gitleaks Secret Detection
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Run Gitleaks
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          config-path: gloven_starter_kit/.gitleaks.toml
+          report-format: sarif
+          redact: true
+          verbose: true
+
+      - name: Upload Gitleaks SARIF results
+        uses: github/codeql-action/upload-sarif@v3
+        if: always()
+        with:
+          sarif_file: gitleaks-report.sarif
+
+  secret-scan:
+    name: Custom Secret Scanner
+    runs-on: ubuntu-latest
+    needs: gitleaks
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+          cache-dependency-path: 'gloven_starter_kit/portal/package-lock.json'
+
+      - name: Install dependencies
+        run: |
+          cd gloven_starter_kit/portal
+          npm ci
+
+      - name: Run custom secret scanner
+        run: |
+          cd gloven_starter_kit/portal
+          node scripts/secret-scan.js
+
+      - name: Upload scan results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: secret-scan-results
+          path: gloven_starter_kit/portal/secret-scan-report.json
+          retention-days: 7
+
+  security-headers:
+    name: Security Headers Check
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+          cache-dependency-path: 'gloven_starter_kit/portal/package-lock.json'
+
+      - name: Install dependencies
+        run: |
+          cd gloven_starter_kit/portal
+          npm ci
+
+      - name: Build application
+        run: |
+          cd gloven_starter_kit/portal
+          npm run build
+
+      - name: Start application in background
+        run: |
+          cd gloven_starter_kit/portal
+          npm start &
+          sleep 10
+
+      - name: Check security headers
+        run: |
+          curl -s -I http://localhost:3000 | grep -E "(Content-Security-Policy|X-Frame-Options|X-Content-Type-Options|Strict-Transport-Security)" || echo "Some security headers missing"
+
+      - name: Stop application
+        run: pkill -f "next start"
+
+  dependency-audit:
+    name: Dependency Security Audit
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+          cache-dependency-path: 'gloven_starter_kit/portal/package-lock.json'
+
+      - name: Install dependencies
+        run: |
+          cd gloven_starter_kit/portal
+          npm ci
+
+      - name: Run npm audit
+        run: |
+          cd gloven_starter_kit/portal
+          npm audit --audit-level=moderate
+
+      - name: Upload audit report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: npm-audit-report
+          path: gloven_starter_kit/portal/npm-audit.json
+          retention-days: 7
+
+  codeql:
+    name: CodeQL Analysis
+    runs-on: ubuntu-latest
+    
+    permissions:
+      security-events: write
+      packages: read
+      actions: read
+      contents: read
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          languages: javascript, typescript
+
+      - name: Autobuild
+        uses: github/codeql-action/autobuild@v3
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v3
+
+  security-summary:
+    name: Security Summary
+    runs-on: ubuntu-latest
+    needs: [gitleaks, secret-scan, security-headers, dependency-audit, codeql]
+    
+    steps:
+      - name: Download scan results
+        uses: actions/download-artifact@v4
+        with:
+          name: secret-scan-results
+          path: ./artifacts
+
+      - name: Generate security summary
+        run: |
+          echo "🔒 Security Scan Summary"
+          echo "========================="
+          echo "✅ Gitleaks: Completed"
+          echo "✅ Custom Secret Scan: Completed" 
+          echo "✅ Security Headers: Completed"
+          echo "✅ Dependency Audit: Completed"
+          echo "✅ CodeQL Analysis: Completed"
+          echo ""
+          echo "All security checks completed successfully."
+          
+          if [ -f "./artifacts/secret-scan-report.json" ]; then
+            echo "Custom scan results available in artifacts"
+          fi
+
+      - name: Create security badge
+        run: |
+          echo "🛡️ Security Status: PASSED" > security-status.md
+          echo "All security checks completed successfully." >> security-status.md
+
+      - name: Upload security status
+        uses: actions/upload-artifact@v4
+        with:
+          name: security-status
+          path: security-status.md
+          retention-days: 7

@@ -1,0 +1,15 @@
+Subject: Welcome to Gloven — Cohort 01
+
+Hi {first_name},
+
+Huge congratulations — we’re thrilled to invite {startup} into **Gloven Cohort 01**.
+
+Next steps:
+1) Review and sign the Program Agreement (link)
+2) Fill the founder profile (link)
+3) Join Slack (invite to follow)
+
+Kickoff is on {date}. We can’t wait to work with you.
+
+With warmth,
+Team Gloven

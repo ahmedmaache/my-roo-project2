@@ -1,0 +1,11 @@
+# Founder Pitch Deck — Outline
+1. Title (company, one‑liner, contact)
+2. Problem (who, pain, urgency)
+3. Solution (product demo, why now)
+4. Market (size, wedge → expansion)
+5. Traction (metrics, case studies)
+6. Business model (pricing, unit economics)
+7. Go‑to‑market (channels, motion)
+8. Competition (why you win)
+9. Team (why you)
+10. Ask (round, use of funds, milestones)
