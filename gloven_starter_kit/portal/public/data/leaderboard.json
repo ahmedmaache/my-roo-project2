@@ -1,0 +1,87 @@
+{
+  "generated": "2025-11-10T13:39:45.607Z",
+  "totalApps": 9,
+  "entries": [
+    {
+      "rank": 1,
+      "id": "app-003",
+      "company": "EduTech Brasil",
+      "region": "LATAM",
+      "stage": "Idea",
+      "score": 95,
+      "band": "GO"
+    },
+    {
+      "rank": 2,
+      "id": "app-007",
+      "company": "FoodTech MX",
+      "region": "LATAM",
+      "stage": "Idea",
+      "score": 89,
+      "band": "GO"
+    },
+    {
+      "rank": 3,
+      "id": "app-010",
+      "company": "EdWise Africa",
+      "region": "EMEA",
+      "stage": "MVP",
+      "score": 84,
+      "band": "GO"
+    },
+    {
+      "rank": 4,
+      "id": "app-002",
+      "company": "GreenCycle",
+      "region": "EMEA",
+      "stage": "Revenue",
+      "score": 77,
+      "band": "GO"
+    },
+    {
+      "rank": 5,
+      "id": "app-004",
+      "company": "FinFlow",
+      "region": "US",
+      "stage": "Revenue",
+      "score": 77,
+      "band": "GO"
+    },
+    {
+      "rank": 6,
+      "id": "app-001",
+      "company": "HealthKit AI",
+      "region": "APAC",
+      "stage": "MVP",
+      "score": 75,
+      "band": "GO"
+    },
+    {
+      "rank": 7,
+      "id": "app-008",
+      "company": "EcoSolutions",
+      "region": "EMEA",
+      "stage": "Revenue",
+      "score": 75,
+      "band": "GO"
+    },
+    {
+      "rank": 8,
+      "id": "app-006",
+      "company": "AgriTech India",
+      "region": "APAC",
+      "stage": "MVP",
+      "score": 73,
+      "band": "GO"
+    },
+    {
+      "rank": 9,
+      "id": "app-009",
+      "company": "CryptoVerse",
+      "region": "US",
+      "stage": "Revenue",
+      "score": 70,
+      "band": "GO"
+    }
+  ]
+}
