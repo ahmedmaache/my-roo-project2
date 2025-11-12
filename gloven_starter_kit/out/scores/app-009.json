@@ -1,0 +1,103 @@
+{
+  "app": {
+    "id": "app-009",
+    "founderName": "David Kim",
+    "email": "david@cryptoverse.io",
+    "company": "CryptoVerse",
+    "region": "US",
+    "stage": "Revenue",
+    "summary": "\"Crypto trading platform. $500K ARR but regulatory concerns in multiple jurisdictions - major red flag. Team lacks compliance expertise.\"",
+    "links": "\"https://cryptoverse.io\""
+  },
+  "score": {
+    "startup_name": "CryptoVerse",
+    "team": {
+      "score": 5,
+      "evidence": "DRY-RUN placeholder",
+      "strengths": [
+        "Placeholder strength 1",
+        "Placeholder strength 2"
+      ],
+      "concerns": [
+        "Placeholder concern"
+      ]
+    },
+    "problem_size": {
+      "score": 1,
+      "evidence": "DRY-RUN placeholder",
+      "strengths": [
+        "Placeholder strength 1",
+        "Placeholder strength 2"
+      ],
+      "concerns": [
+        "Placeholder concern"
+      ]
+    },
+    "insight": {
+      "score": 2,
+      "evidence": "DRY-RUN placeholder",
+      "strengths": [
+        "Placeholder strength 1",
+        "Placeholder strength 2"
+      ],
+      "concerns": [
+        "Placeholder concern"
+      ]
+    },
+    "traction": {
+      "score": 3,
+      "evidence": "DRY-RUN placeholder",
+      "strengths": [
+        "Placeholder strength 1",
+        "Placeholder strength 2"
+      ],
+      "concerns": [
+        "Placeholder concern"
+      ]
+    },
+    "timing": {
+      "score": 4,
+      "evidence": "DRY-RUN placeholder",
+      "strengths": [
+        "Placeholder strength 1",
+        "Placeholder strength 2"
+      ],
+      "concerns": [
+        "Placeholder concern"
+      ]
+    },
+    "fit": {
+      "score": 5,
+      "evidence": "DRY-RUN placeholder",
+      "strengths": [
+        "Placeholder strength 1",
+        "Placeholder strength 2"
+      ],
+      "concerns": [
+        "Placeholder concern"
+      ]
+    },
+    "impact": {
+      "score": 1,
+      "evidence": "DRY-RUN placeholder",
+      "strengths": [
+        "Placeholder strength 1",
+        "Placeholder strength 2"
+      ],
+      "concerns": [
+        "Placeholder concern"
+      ]
+    },
+    "weighted_total_0to100": 70,
+    "decision": "GO",
+    "red_flags": [],
+    "followup_questions": [
+      "What is your current runway?",
+      "How will you acquire your first 100 customers?",
+      "What is your biggest risk?"
+    ],
+    "summary": "DRY-RUN: Deterministic score for CryptoVerse. This is placeholder data with score 70/100.",
+    "reviewer": "AI (DRY-RUN)",
+    "review_date": "2025-11-10"
+  }
+}

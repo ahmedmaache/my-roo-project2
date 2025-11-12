@@ -1,0 +1,103 @@
+{
+  "app": {
+    "id": "app-004",
+    "founderName": "James Park",
+    "email": "james@finflow.io",
+    "company": "FinFlow",
+    "region": "US",
+    "stage": "Revenue",
+    "summary": "\"Fintech SaaS for SMB cash flow management. $250K ARR",
+    "links": "120 customers. Strong traction but facing competition from established players. Team has exits.\""
+  },
+  "score": {
+    "startup_name": "FinFlow",
+    "team": {
+      "score": 2,
+      "evidence": "DRY-RUN placeholder",
+      "strengths": [
+        "Placeholder strength 1",
+        "Placeholder strength 2"
+      ],
+      "concerns": [
+        "Placeholder concern"
+      ]
+    },
+    "problem_size": {
+      "score": 3,
+      "evidence": "DRY-RUN placeholder",
+      "strengths": [
+        "Placeholder strength 1",
+        "Placeholder strength 2"
+      ],
+      "concerns": [
+        "Placeholder concern"
+      ]
+    },
+    "insight": {
+      "score": 4,
+      "evidence": "DRY-RUN placeholder",
+      "strengths": [
+        "Placeholder strength 1",
+        "Placeholder strength 2"
+      ],
+      "concerns": [
+        "Placeholder concern"
+      ]
+    },
+    "traction": {
+      "score": 5,
+      "evidence": "DRY-RUN placeholder",
+      "strengths": [
+        "Placeholder strength 1",
+        "Placeholder strength 2"
+      ],
+      "concerns": [
+        "Placeholder concern"
+      ]
+    },
+    "timing": {
+      "score": 1,
+      "evidence": "DRY-RUN placeholder",
+      "strengths": [
+        "Placeholder strength 1",
+        "Placeholder strength 2"
+      ],
+      "concerns": [
+        "Placeholder concern"
+      ]
+    },
+    "fit": {
+      "score": 2,
+      "evidence": "DRY-RUN placeholder",
+      "strengths": [
+        "Placeholder strength 1",
+        "Placeholder strength 2"
+      ],
+      "concerns": [
+        "Placeholder concern"
+      ]
+    },
+    "impact": {
+      "score": 3,
+      "evidence": "DRY-RUN placeholder",
+      "strengths": [
+        "Placeholder strength 1",
+        "Placeholder strength 2"
+      ],
+      "concerns": [
+        "Placeholder concern"
+      ]
+    },
+    "weighted_total_0to100": 77,
+    "decision": "GO",
+    "red_flags": [],
+    "followup_questions": [
+      "What is your current runway?",
+      "How will you acquire your first 100 customers?",
+      "What is your biggest risk?"
+    ],
+    "summary": "DRY-RUN: Deterministic score for FinFlow. This is placeholder data with score 77/100.",
+    "reviewer": "AI (DRY-RUN)",
+    "review_date": "2025-11-10"
+  }
+}
